@@ -63,11 +63,17 @@ func getDefaultEndpointFromRepoInfo(repoInfo *registry.RepositoryInfo) (registry
 	}
 	// Default to the highest priority endpoint to return
 	endpoint := endpoints[0]
-	if !repoInfo.Index.Secure {
-		for _, ep := range endpoints {
-			if ep.URL.Scheme == "http" {
-				endpoint = ep
-			}
+	// if !repoInfo.Index.Secure {
+	// 	for _, ep := range endpoints {
+	// 		if ep.URL.Scheme == "http" {
+	// 			endpoint = ep
+	// 		}
+	// 	}
+	// }
+	// 使用Http V2
+	for _, ep := range endpoints {
+		if ep.URL.Scheme == "http" && ep.Version == 2 {
+			endpoint = ep
 		}
 	}
 	return endpoint, nil

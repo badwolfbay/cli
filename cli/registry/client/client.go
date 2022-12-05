@@ -101,6 +101,9 @@ func (c *client) MountBlob(ctx context.Context, sourceRef reference.Canonical, t
 // PutManifest sends the manifest to a registry and returns the new digest
 func (c *client) PutManifest(ctx context.Context, ref reference.Named, manifest distribution.Manifest) (digest.Digest, error) {
 	repoEndpoint, err := newDefaultRepositoryEndpoint(ref, c.insecureRegistry)
+	// force use http
+	repoEndpoint.endpoint.URL.Scheme = "http"
+	logrus.Debugf("repoEndpoint %s created", repoEndpoint)
 	if err != nil {
 		return digest.Digest(""), err
 	}

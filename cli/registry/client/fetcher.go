@@ -11,7 +11,7 @@ import (
 	"github.com/docker/distribution/manifest/schema2"
 	"github.com/docker/distribution/reference"
 	"github.com/docker/distribution/registry/api/errcode"
-	"github.com/docker/distribution/registry/api/v2"
+	v2 "github.com/docker/distribution/registry/api/v2"
 	distclient "github.com/docker/distribution/registry/client"
 	"github.com/docker/docker/registry"
 	digest "github.com/opencontainers/go-digest"
@@ -278,6 +278,8 @@ func allEndpoints(namedRef reference.Named, insecure bool) ([]registry.APIEndpoi
 		return []registry.APIEndpoint{}, err
 	}
 	endpoints, err := registryService.LookupPullEndpoints(reference.Domain(repoInfo.Name))
+	// TODO: 根据https和v1两个条件判断.
+	endpoints = append(endpoints[:0], endpoints[1])
 	logrus.Debugf("endpoints for %s: %v", namedRef, endpoints)
 	return endpoints, err
 }
